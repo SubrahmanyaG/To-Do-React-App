@@ -13,11 +13,20 @@ export default class ToDoList extends Component {
     const pending = {
       color: 'red',
     };
-
-    const todoItems = this.props.todoList.map((todo,index) =>
-        <li  onClick={(e)=>this.props.toggle(index,todo.todo)} style={todo.status?done:pending} key={index}>
-          {todo.todo}
-        </li>
+    let filter = this.props.filter
+    let completed = 0
+    const todoItems = this.props.todoList.map((todo,index) => {
+        if(todo.status) {
+          completed++;
+        }
+        return ((filter==='all')?<li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>
+          {todo.text}
+        </li>:(filter==='completed' && todo.status===true)?<li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>
+          {todo.text}
+        </li>:(filter==='pending' && todo.status===false)?<li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>
+          {todo.text}
+        </li>:null)
+    }
       );
       const selected = {
         color: 'blue',
@@ -30,10 +39,11 @@ export default class ToDoList extends Component {
          <br/>
          <div className="visiblity">
            <div><small>Show: </small></div>
-           <div style={this.props.visiblityType==='ALL'?selected:null} onClick={(e)=>this.props.visiblityHandler('ALL')}><small>ALL</small></div>
-           <div style={this.props.visiblityType==='Completed'?selected:null} onClick={(e)=>this.props.visiblityHandler('Completed')}><small>Completed</small></div>
-           <div style={this.props.visiblityType==='Pending'?selected:null} onClick={(e)=>this.props.visiblityHandler('Pending')}><small>Pending</small></div>
+           <div style={this.props.filter==='all'?selected:null} onClick={(e)=>this.props.visiblityHandler('all')}><small>ALL</small></div>
+           <div style={this.props.filter==='completed'?selected:null} onClick={(e)=>this.props.visiblityHandler('completed')}><small>Completed</small></div>
+           <div style={this.props.filter==='pending'?selected:null} onClick={(e)=>this.props.visiblityHandler('pending')}><small>Pending</small></div>
          </div>
+         <div>Total: {this.props.todoList.length} Completed: {completed} Pending: {this.props.todoList.length-completed}</div>
       </div>
     )
   }

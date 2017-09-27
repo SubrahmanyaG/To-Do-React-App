@@ -5,7 +5,7 @@ export default class ToDoForm extends Component {
 			if (event.keyCode !== 13) {
 				return;
 			}
-      this.props.addToDo({todo:event.target.value})
+      this.props.addToDo(event.target.value)
 		}
 
   render() {
@@ -16,7 +16,6 @@ export default class ToDoForm extends Component {
           <input
             className="new-todo"
             placeholder="Add To-Do here"
-            value={this.props.newTodo}
             onKeyDown={this.handleNewTodoKeyDown}
             autoFocus={true}
           />

@@ -6,91 +6,37 @@ export default class ToDoComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      todoList: [
-        {
-          todo: "play",
-          status: true,
-        },
-        {
-          todo: "test",
-          status: false,
-        }
-      ],
-      newToDo:'',
-      visiblity:'ALL'
+      todoList: [],
+      statusFilter: 'all'
     }
-    this.addToDo = this.addToDo.bind(this);
-    this.toggleStatus = this.toggleStatus.bind(this);
-    this.countPending = this.countPending.bind(this);
-  }
-  addToDo(data) {
-    var newArray = this.state.todoList? this.state.todoList.slice(): [];
-    data['status'] = false;
-    let flag = true;
-    newArray.map((item) =>{
-      if(item.todo===data.todo){
-        flag = false;
-        alert("To-Do name must be unique", item.todo, data.todo);
-      }
-    })
-    if(flag && data.todo!==''){newArray.push(data);}
-    this.setState({todoList: newArray});
   }
 
-  visiblityHandler = (type) =>{
-    this.setState({visiblity:type})
+  handleAddTodo = (value) => {
+    let todoObj = {
+      text: value,
+      status: false
+    }
+    let todoList = [...this.state.todoList, todoObj]
+    this.setState({todoList: todoList})
   }
 
-  toggleStatus(index, selectedtodo) {
-    var newArray = this.state.todoList? this.state.todoList.slice(): [];
-    // newArray[index].status = !newArray[index].status;
-    newArray.map((todo)=>{
-      if(todo.todo===selectedtodo){
-        todo.status=!todo.status;
-      }
-    })
-    this.setState({todoList: newArray});
+  toggleTodo = (index) => {
+    let ToDoList = [...this.state.todoList]
+    ToDoList[index]['status'] = !ToDoList[index]['status']
+    this.setState({todoList: ToDoList})
   }
 
-  countPending = ()=>{
-    let count = 0;
-    this.state.todoList.map((todo)=>{
-      if(!todo.status){
-        count+=1;
-      }
-    })
-    return count
+  visiblityHandler = (filterType) => {
+    this.setState({statusFilter:filterType})
   }
 
   render() {
-    let todos=[];
-    if(this.state.visiblity==='ALL'){
-      this.state.todoList.map((todo)=>{
-        todos.push(todo);
-      })
-    }
-    if(this.state.visiblity==='Completed'){
-      this.state.todoList.map((todo)=>{
-        if(todo.status){
-          todos.push(todo);
-        }
-      })
-    }
-    if(this.state.visiblity==='Pending'){
-      this.state.todoList.map((todo)=>{
-        if(!todo.status){
-          todos.push(todo);
-        }
-      })
-    }
+    console.log(this.state)
     return(
       <div className='ToDoComponent'>
-        <ToDoForm className="form-inline" newToDo={this.state.newToDo} addToDo={this.addToDo}/>
-        <ToDoList visiblityType={this.state.visiblity} todoList={todos} toggle={this.toggleStatus} visiblityHandler={this.visiblityHandler}/>
-        <div className='Count'>
-          <div><h5>Total Todos: </h5>{this.state.todoList.length}</div>
-          <div><h5>Pending Todos: </h5>{this.countPending()}</div>
-        </div>
+        <ToDoForm className="form-inline" addToDo={this.handleAddTodo}/>
+        <ToDoList todoList={this.state.todoList} toggleTodo={this.toggleTodo}
+          filter={this.state.statusFilter} visiblityHandler={this.visiblityHandler}/>
       </div>
     )
   }
