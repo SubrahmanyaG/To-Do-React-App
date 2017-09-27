@@ -16,6 +16,8 @@ export default class ToDoComponent extends Component {
           status: false,
         }
       ],
+      newToDo:'',
+      visiblity:'ALL'
     }
     this.addToDo = this.addToDo.bind(this);
     this.toggleStatus = this.toggleStatus.bind(this);
@@ -35,16 +37,23 @@ export default class ToDoComponent extends Component {
     this.setState({todoList: newArray});
   }
 
-  toggleStatus(index) {
-    console.log(index);
+  visiblityHandler = (type) =>{
+    this.setState({visiblity:type})
+  }
+
+  toggleStatus(index, selectedtodo) {
     var newArray = this.state.todoList? this.state.todoList.slice(): [];
-    newArray[index].status = !newArray[index].status;
+    // newArray[index].status = !newArray[index].status;
+    newArray.map((todo)=>{
+      if(todo.todo===selectedtodo){
+        todo.status=!todo.status;
+      }
+    })
     this.setState({todoList: newArray});
   }
 
   countPending = ()=>{
     let count = 0;
-    console.log(count, "COunt")
     this.state.todoList.map((todo)=>{
       if(!todo.status){
         count+=1;
@@ -54,14 +63,33 @@ export default class ToDoComponent extends Component {
   }
 
   render() {
-    console.log(this.state.todoList, "HERE")
+    let todos=[];
+    if(this.state.visiblity==='ALL'){
+      this.state.todoList.map((todo)=>{
+        todos.push(todo);
+      })
+    }
+    if(this.state.visiblity==='Completed'){
+      this.state.todoList.map((todo)=>{
+        if(todo.status){
+          todos.push(todo);
+        }
+      })
+    }
+    if(this.state.visiblity==='Pending'){
+      this.state.todoList.map((todo)=>{
+        if(!todo.status){
+          todos.push(todo);
+        }
+      })
+    }
     return(
       <div className='ToDoComponent'>
-        <ToDoForm addToDo={this.addToDo}/>
-        <ToDoList todoList={this.state.todoList} toggle={this.toggleStatus}/>
+        <ToDoForm className="form-inline" newToDo={this.state.newToDo} addToDo={this.addToDo}/>
+        <ToDoList visiblityType={this.state.visiblity} todoList={todos} toggle={this.toggleStatus} visiblityHandler={this.visiblityHandler}/>
         <div className='Count'>
-          <div>Total todos: {this.state.todoList.length}</div>
-          <div>pending: {this.countPending()}</div>
+          <div><h5>Total Todos: </h5>{this.state.todoList.length}</div>
+          <div><h5>Pending Todos: </h5>{this.countPending()}</div>
         </div>
       </div>
     )

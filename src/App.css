@@ -25,17 +25,39 @@
 }
 
 .ToDoComponent {
-  padding: 75px;
+  padding: 10px 75px 24px 75px;
+  width:500px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  background: #fff;
+  margin: 40px 40px 40px 40px;
+  position: relative;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
 }
 
 .Count {
   margin-top: 75px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.new-todo {
+  width:300px;
+  padding: 8px 16px 8px 16px;
+  border: none;
+  background: rgba(0, 0, 0, 0.003);
+  box-shadow: inset 1px -2px 1px rgba(1,0,0,0.03);
+}
+
+.visiblity {
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  box-shadow: 2px 2px 5px #888888;
 }
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
