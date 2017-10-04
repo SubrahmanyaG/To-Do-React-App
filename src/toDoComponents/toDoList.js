@@ -19,13 +19,17 @@ export default class ToDoList extends Component {
         if(todo.status) {
           completed++;
         }
-        return ((filter==='all')?<li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>
-          {todo.text}
-        </li>:(filter==='completed' && todo.status===true)?<li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>
-          {todo.text}
-        </li>:(filter==='pending' && todo.status===false)?<li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>
-          {todo.text}
-        </li>:null)
+        return (
+          (filter==='all') ?
+            <li onClick={(e)=>this.props.toggleTodo(index)} style={todo.status?done:pending} key={index}>{todo.text}</li>
+            :
+            (filter==='completed' && todo.status) ?
+                  <li onClick={(e)=>this.props.toggleTodo(index)} style={done} key={index}>{todo.text}</li>
+                  :
+                  (filter==='pending' && !todo.status)?
+                        <li onClick={(e)=>this.props.toggleTodo(index)} style={pending} key={index}>{todo.text}</li>
+                        :
+                        null)
     }
       );
       const selected = {
